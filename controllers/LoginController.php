@@ -6,11 +6,8 @@ use MVC\Router;
 
 class LoginController {
     public static function login(Router $router) {
-       
-
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
-
         // Render a la vista
         $router->render('auth/login', [
             'titulo' => 'Iniciar Sesion'
@@ -22,10 +19,7 @@ class LoginController {
     }
 
     public static function crear(Router $router) {
-        
-
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
-
         }
          // Render a la vista
          $router->render('auth/crear', [
@@ -33,27 +27,37 @@ class LoginController {
         ]);
     }
 
-    public static function olvide() {
-        echo 'desde olvide';
-        
+    public static function olvide(Router $router) {
+        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        }
+             // Render a la vista
+            $router->render('auth/olvide', [
+                'titulo' => 'Olvidaste tu Password'
+            ]);
+    }
+
+    public static function reestablecer(Router $router) {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         }
+         // Render a la vista
+        $router->render('auth/reestablecer', [
+             'titulo' => 'Reestablecer tu Password'
+        ]);
     }
 
-    public static function reestablecer() {
-        echo 'desde reestablecer';
-        
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        }
+    public static function mensaje(Router $router) {
+              
+        // Render a la vista
+        $router->render('auth/mensaje', [
+            'titulo' => 'Cuenta creada correctamente'
+        ]);
     }
 
-    public static function mensaje() {
-        echo 'desde mensaje';
-    }
-
-    public static function confirmar() {
-        echo 'desde confirmar';
+    public static function confirmar(Router $router) {
+        // Render a la vista
+        $router->render('auth/confirmar', [
+            'titulo' => 'Confirma tu cuenta UpTask'
+        ]);
     }
 }

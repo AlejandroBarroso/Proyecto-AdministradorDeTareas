@@ -1,12 +1,8 @@
 <div class="contenedor crear">
-
 <?php include_once __DIR__ . '/../templates/nombre-sitio.php' ?>
-
     <div class="contenedor-sm">
         <p class="descripcion-pagina">Crea tu cuenta en UpTask</p>
-
-        <form action="/" class="formulario" method="POST">
-
+        <form action="/crear" class="formulario" method="POST">
         <div class="campo">
                 <label for="nombre">Nombre</label>
                 <input
@@ -17,7 +13,6 @@
                     value=""
                 />
             </div>
-
             <div class="campo">
                 <label for="email">E-mail</label>
                 <input
@@ -28,8 +23,6 @@
                     value=""
                 />
             </div>
-
-    
             <div class="campo">
                 <label for="password">Password</label>
                 <input
@@ -40,7 +33,6 @@
                     value=""
                 />
             </div>
-            
             <div class="campo">
                 <label for="password2">Confirmar Password</label>
                 <input
@@ -51,9 +43,8 @@
                     value=""
                 />
             </div>
-            <input type="submit" class="boton" value="Iniciar Sesión">
+            <input type="submit" class="boton" value="Crear Cuenta">
         </form>
-
         <div class="acciones">
             <a href="/">Ya tienes una cuenta? Iniciar sesión.</a>
             <a href="/olvide">Olvidaste tu password?</a>
