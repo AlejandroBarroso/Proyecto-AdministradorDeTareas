@@ -10,7 +10,7 @@
                     id="nombre"
                     placeholder="Tu Nombre"
                     name="nombre"
-                    value=""
+                    value="<?php echo $usuario->nombre; ?>"
                 />
             </div>
             <div class="campo">
@@ -20,7 +20,7 @@
                     id="email"
                     placeholder="Tu E-mail"
                     name="email"
-                    value=""
+                    value="<?php echo $usuario->email; ?>"
                 />
             </div>
             <div class="campo">
