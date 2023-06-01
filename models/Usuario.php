@@ -36,7 +36,7 @@ class Usuario extends ActiveRecord {
         if(strlen(!$this->password) < 6) {
             self::$alertas['error'] [] = 'El password debe contener al menos 6 caractateres';
         }
-        if(!$this->password !== $this->password2) {
+        if($this->password !== $this->password2) {
             self::$alertas['error'] [] = 'Los passwords son diferentes';
         }
        
