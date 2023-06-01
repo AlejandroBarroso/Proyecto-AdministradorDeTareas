@@ -25,7 +25,25 @@ class LoginController {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             $usuario->sincronizar($_POST);
             $alertas = $usuario->validarNuevaCuenta(); 
-           
+            if(empty($alertas)) {
+                $existeUsuario = Usuario::where('email', $usuario->email);
+                if($existeUsuario) {
+                  Usuario::setAlerta('error', 'El usuario ya esta registrdo');
+                  $alertas = Usuario::getAlertas();
+                } else {
+                    // Hash al password
+                    $usuario->hashPassword();
+                    // Eliminar password2
+                    unset($usuario->password2);
+                    // Generar token
+                    $usuario->crearToken();
+                    // crear un nuevo usuario
+                    $resulatdo = $usuario->guardar();
+                    if($resulatdo) {
+                        header('Location: /mensaje');
+                    }
+                }
+            }
         }
          // Render a la vista
          $router->render('auth/crear', [

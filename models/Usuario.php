@@ -20,7 +20,7 @@ class Usuario extends ActiveRecord {
         $this->password = $args['password'] ?? '';
         $this->password2 = $args['password2'] ?? '';
         $this->token = $args['token'] ?? '';
-        $this->confirmado = $args['confirmado'] ?? '';
+        $this->confirmado = $args['confirmado'] ?? 0;
     }
 
     public function validarNuevaCuenta() {
@@ -33,7 +33,7 @@ class Usuario extends ActiveRecord {
         if(!$this->password) {
             self::$alertas['error'] [] = 'El password es obligatorio';
         }
-        if(strlen(!$this->password) < 6) {
+        if(strlen($this->password) < 6) {
             self::$alertas['error'] [] = 'El password debe contener al menos 6 caractateres';
         }
         if($this->password !== $this->password2) {
@@ -42,5 +42,15 @@ class Usuario extends ActiveRecord {
        
 
         return self::$alertas;
+    }
+
+    // hashea el password
+    public function hashPassword() {
+        $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+    }
+
+    // Genera token
+    public function crearToken() {
+        $this->token = uniqid();
     }
 }
