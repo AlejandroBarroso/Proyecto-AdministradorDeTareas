@@ -34,7 +34,6 @@ class Usuario extends ActiveRecord {
         if(!$this->password) {
             self::$alertas['error'] [] = 'El password es obligatorio';
         }
-
         return self::$alertas;
     }
 
@@ -55,7 +54,6 @@ class Usuario extends ActiveRecord {
         if($this->password !== $this->password2) {
             self::$alertas['error'] [] = 'Los passwords son diferentes';
         }
-       
         return self::$alertas;
     }
 
@@ -64,11 +62,9 @@ class Usuario extends ActiveRecord {
         if(!$this->email) {
             self::$alertas['error'] [] = 'El Email es obligatorio';
         }
-
         if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             self::$alertas['error'] [] = 'Email no válido';
         }
-
         return self::$alertas;
     }
 
@@ -80,7 +76,9 @@ class Usuario extends ActiveRecord {
         if(strlen($this->password) < 6) {
             self::$alertas['error'] [] = 'El password debe contener al menos 6 caractateres';
         }
-
+        if($this->password !== $this->password2) {
+            self::$alertas['error'] [] = 'Los passwords son diferentes';
+        }
         return self::$alertas;
     }
 
