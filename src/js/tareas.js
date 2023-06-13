@@ -23,8 +23,7 @@
                     <div class="opciones">
                         <input type="submit" class="submit-nueva-tarea" value="Añadir Tarea"/>
                         <button type="button" class="cerrar-modal">Cancelar</button>
-
-                    </div>
+                     </div>
             </form>
         `;
 
@@ -46,7 +45,6 @@
                 submitFormularioNuevaTarea();
             }
         })
-
         document.querySelector('.dashboard').appendChild(modal);
     }
 
@@ -61,9 +59,7 @@
         } 
 
         agregarTarea(tarea); 
-        
     }
-
     // Muestra un mensaje en la interfaz
     function mostrarAlerta(mensaje, tipo, referencia) {
         // previene la creacion de multiples alertas
@@ -75,10 +71,9 @@
         const alerta = document.createElement('DIV');
         alerta.classList.add('alerta', tipo);
         alerta.textContent = mensaje;
-        
-        // Insertra la alerta antes del legend
-        referencia.parentElement.insertBefore(alerta, referencia.nextElementSibling);
 
+         // Insertra la alerta antes del legend
+        referencia.parentElement.insertBefore(alerta, referencia.nextElementSibling);
         // Elimina alerta despues de x segundos
         setTimeout(() => {
             alerta.remove();
@@ -86,8 +81,23 @@
     }
 
     // consultar el servidor para añadir una nueva tarea al proyecto actual
-    function agregarTarea(tarea) {
+    async function agregarTarea(tarea) {
+       // Construir la Peticion
+       const datos = new FormData();
+       datos.append('nombre', 'Ale');
 
+       try {
+        const url = 'http://localhost:3000/api/tarea';
+        const respuesta = await fetch(url, {
+            method: 'POST',
+            body: datos
+        });
+
+        const resultado = await respuesta.json();
+        console.log(resultado); 
+
+       } catch (error) {
+        console.log(error);
+       }
     }
-
 })();
