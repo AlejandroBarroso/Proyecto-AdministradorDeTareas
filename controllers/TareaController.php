@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Model\Proyecto;
+use Model\Tarea;
 
 class TareaController {
     public static function index() {
@@ -24,13 +25,20 @@ class TareaController {
                     'mensaje' => 'Error al agregar la tarea'
                 ];
                  echo json_encode($respuesta);
-            } else {
-                $respuesta = [
-                    'tipo' => 'exito',
-                    'mensaje' => 'Tarea agregada correctamente'
-                ];
-                 echo json_encode($respuesta);
+                 return;
             }
+
+            // Todo bien, instaciar y crear la tarea
+
+            $tarea = new Tarea($_POST);
+            $tarea->proyectoId = $proyecto->id;
+            $resultado = $tarea->guardar();
+            $respuesta = [
+                'tipo' => 'exito',
+                'id' => $resultado['id'],
+                'mensaje' => 'Tarea Creada Correctamente'
+            ];
+            echo json_encode($respuesta);
         }
     }
 

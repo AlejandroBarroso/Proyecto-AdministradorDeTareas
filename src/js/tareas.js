@@ -94,9 +94,17 @@
             body: datos
         });
         const resultado = await respuesta.json();
-        console.log(resultado); 
+    
         mostrarAlerta(resultado.mensaje, resultado.tipo, 
         document.querySelector('.formulario legend'));
+
+            if(resultado.tipo === 'exito') {
+                const modal = document.querySelector('.modal');
+                setTimeout(() => {
+                    modal.remove();
+                }, 3000);
+            }
+
        } catch (error) {
         console.log(error);
        }
