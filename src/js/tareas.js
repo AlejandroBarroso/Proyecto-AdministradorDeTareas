@@ -3,6 +3,7 @@
 (function() {
 
     obtenerTareas(); 
+    let tareas = [];
 
     // Boton para mostrar el modal de agregar tareas
     const nuevaTareaBtn = document.querySelector('#agregar-tarea');
@@ -15,23 +16,21 @@
             const respuesta = await fetch(url);
             const resultado = await respuesta.json();
             
-            const {tareas} = resultado;
-
-           mostrarTareas(tareas);
+            tareas = resultado.tareas;
+            mostrarTareas();
             
         } catch (error) {
             console.log(error);
         }   
     }
 
-    function mostrarTareas(tareas) {
+    function mostrarTareas() {
+        limpiarTareas();
         if(tareas.length === 0) {
             const contenedorTareas = document.querySelector('#listado-tareas');
-
             const textoNoTareas = document.createElement('LI');
             textoNoTareas.textContent = 'No Hay Tareas';
             textoNoTareas.classList.add('no-tareas');
-
             contenedorTareas.appendChild(textoNoTareas);
             return;
         }
@@ -63,13 +62,10 @@
             btnEliminarTarea.classList.add('eliminar-tarea');
             btnEliminarTarea.dataset.idTarea = tarea.id;
             btnEliminarTarea.textContent = 'Eliminar';
-
             opcionesDiv.appendChild(btnEstadoTarea);
             opcionesDiv.appendChild(btnEliminarTarea);
-
             contenedorTarea.appendChild(nombreTarea);
             contenedorTarea.appendChild(opcionesDiv);
-
 
             const listadoTareas = document.querySelector('#listado-tareas');
             listadoTareas.appendChild(contenedorTarea);
@@ -97,12 +93,10 @@
                      </div>
             </form>
         `;
-
         setTimeout(() => {
             const formulario = document.querySelector('.formulario');
             formulario.classList.add('animar');   
         }, 0);
-
         modal.addEventListener('click', function(e) {
             e.preventDefault();
             if(e.target.classList.contains('cerrar-modal')) {
@@ -121,16 +115,15 @@
 
     function submitFormularioNuevaTarea() {
         const tarea = document.querySelector('#tarea').value.trim();
-
         if(tarea === '') {
             // Mostrar en alerta de error
             mostrarAlerta('El nombre de la tarea es obligatorio', 'error', 
             document.querySelector('.formulario legend'));
             return;
         } 
-
         agregarTarea(tarea); 
     }
+
     // Muestra un mensaje en la interfaz
     function mostrarAlerta(mensaje, tipo, referencia) {
         // previene la creacion de multiples alertas
@@ -157,7 +150,6 @@
        const datos = new FormData();
        datos.append('nombre', tarea);
        datos.append('proyectoId', obtenerProyecto());
-
        try {
         const url = 'http://localhost:3000/api/tarea';
         const respuesta = await fetch(url, {
@@ -165,17 +157,24 @@
             body: datos
         });
         const resultado = await respuesta.json();
-    
         mostrarAlerta(resultado.mensaje, resultado.tipo, 
         document.querySelector('.formulario legend'));
-
             if(resultado.tipo === 'exito') {
                 const modal = document.querySelector('.modal');
                 setTimeout(() => {
                     modal.remove();
                 }, 3000);
-            }
 
+                // Agregar el objeto de tarea al global de tareas
+                const tareaObj = {
+                    id: String(resultado.id),
+                    nombre: tarea,
+                    estado: "0",
+                    proyectoId: resultado.proyectoId
+                }
+                tareas = [...tareas, tareaObj];
+                mostrarTareas();
+            }
        } catch (error) {
         console.log(error);
        }
@@ -185,5 +184,13 @@
         proyectoParams = new URLSearchParams(window.location.search);
         const proyecto = Object.fromEntries(proyectoParams.entries());
         return proyecto.id;
+    }
+
+    function limpiarTareas() {
+        const listadoTareas = document.querySelector('#listado-tareas');
+
+        while(listadoTareas.firstChild) {
+            listadoTareas.removeChild(listadoTareas.firstChild); 
+        }
     }
 })();
