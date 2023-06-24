@@ -19,7 +19,6 @@ if(cerrarMenuBtn) {
 }
 
 // Elimina la clase de .mostrar en una tablet o mayores
-
 window.addEventListener('resize', function() {
     const anchoPantalla = document.body.clientWidth;
     if(anchoPantalla >= 768) {

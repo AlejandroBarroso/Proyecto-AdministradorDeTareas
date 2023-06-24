@@ -9,9 +9,13 @@ class Usuario extends ActiveRecord {
     public $nombre;    
     public $email;    
     public $password;    
-    public $password2;    
+    public $password2;
+    public $password_actual;
+    public $password_nuevo;
+    public $repetir_password_nuevo; 
     public $token;    
     public $confirmado;
+
 
     public function __construct($args = []) {
         $this->id = $args['id'] ?? null;
@@ -19,6 +23,9 @@ class Usuario extends ActiveRecord {
         $this->email = $args['email'] ?? '';
         $this->password = $args['password'] ?? '';
         $this->password2 = $args['password2'] ?? '';
+        $this->password_actual = $args['password_actual'] ?? '';
+        $this->password_nuevo = $args['password_nuevo'] ?? '';
+        $this->repetir_password_nuevo = $args['repetir_password_nuevo'] ?? '';
         $this->token = $args['token'] ?? '';
         $this->confirmado = $args['confirmado'] ?? 0;
     }
@@ -82,13 +89,41 @@ class Usuario extends ActiveRecord {
         return self::$alertas;
     }
 
+    public function validar_perfil() {
+        if(!$this->nombre) {
+            self::$alertas['error'][] = 'El Nombre es Obligatorio';
+        }
+        if(!$this->email) {
+            self::$alertas['error'][] = 'El Email es Obligatorio';
+        }
+        return self::$alertas;
+    }
+
+    public function nuevo_password() : array {
+        if(!$this->password_actual) {
+            self::$alertas['error'][] = 'El Password Actual Es Obligatorio';
+        }
+        if(!$this->password_nuevo) {
+            self::$alertas['error'][] = 'El Password Nuevo Es Obligatorio';
+        }
+        if(strlen($this->password_nuevo) < 6) {
+            self::$alertas['error'][] = 'El Password Nuevo debe Tener Minimo 6 Caracteres';
+        }
+        return self::$alertas;
+    }
+
+               
+    public function comprobarPassword() : bool {
+        return password_verify($this->password_actual, $this->password);
+    }
+
     // hashea el password
-    public function hashPassword() {
+    public function hashPassword() : void {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);
     }
 
     // Genera token
-    public function crearToken() {
+    public function crearToken() : void {
         $this->token = uniqid();
     }
 }
